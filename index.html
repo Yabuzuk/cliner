@@ -106,8 +106,11 @@
                     <select id="service" required style="display:none;">
                         <option value="">Выберите услугу</option>
                     </select>
-                    <input type="date" id="date" required>
-                    <input type="time" id="time" required>
+                    <input type="date" id="date" required onchange="loadAvailableSlots()">
+                    <select id="time" required style="display:none;">
+                        <option value="">Выберите время</option>
+                    </select>
+                    <div id="calendar" class="calendar-container"></div>
                     <select id="area">
                         <option value="">Район (доплата за логистику)</option>
                         <option value="limassol">Лимассол (без доплаты)</option>
