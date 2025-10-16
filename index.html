@@ -13,6 +13,7 @@
             <nav>
                 <a href="#services">Услуги</a>
                 <a href="#booking">Запись</a>
+                <button class="calendar-btn" onclick="toggleScheduleCalendar()">Календарь уборок</button>
                 <a href="#contact">Контакты</a>
             </nav>
         </div>
@@ -140,6 +141,21 @@
             </div>
         </section>
     </main>
+
+    <!-- Schedule Calendar Modal -->
+    <div id="scheduleModal" class="schedule-modal">
+        <div class="schedule-modal-content">
+            <div class="schedule-header">
+                <h3>Календарь уборок</h3>
+                <span class="close-modal" onclick="toggleScheduleCalendar()">&times;</span>
+            </div>
+            <div class="schedule-controls">
+                <button class="view-btn active" onclick="setView('month')">Месяц</button>
+                <button class="view-btn" onclick="setView('week')">Неделя</button>
+            </div>
+            <div id="scheduleCalendar" class="schedule-calendar"></div>
+        </div>
+    </div>
 
     <footer>
         <div class="container">

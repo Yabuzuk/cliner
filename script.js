@@ -284,6 +284,161 @@ document.getElementById('phone').addEventListener('input', function(e) {
     e.target.value = value;
 });
 
+// Schedule Calendar
+let scheduleView = 'month';
+let scheduleDate = new Date();
+
+function toggleScheduleCalendar() {
+    const modal = document.getElementById('scheduleModal');
+    if (modal.style.display === 'block') {
+        modal.style.display = 'none';
+    } else {
+        modal.style.display = 'block';
+        loadScheduleBookings();
+        renderScheduleCalendar();
+    }
+}
+
+function setView(view) {
+    scheduleView = view;
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    renderScheduleCalendar();
+}
+
+async function loadScheduleBookings() {
+    try {
+        if (window.supabaseDB) {
+            bookedSlots = await window.supabaseDB.select();
+        } else {
+            bookedSlots = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
+        }
+    } catch (error) {
+        bookedSlots = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
+    }
+}
+
+function renderScheduleCalendar() {
+    const container = document.getElementById('scheduleCalendar');
+    
+    if (scheduleView === 'month') {
+        renderMonthView(container);
+    } else {
+        renderWeekView(container);
+    }
+}
+
+function renderMonthView(container) {
+    const year = scheduleDate.getFullYear();
+    const month = scheduleDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    
+    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    
+    container.innerHTML = `
+        <div class="schedule-nav">
+            <button onclick="changeScheduleMonth(-1)">‹ Предыдущий</button>
+            <h3>${monthNames[month]} ${year}</h3>
+            <button onclick="changeScheduleMonth(1)">Следующий ›</button>
+        </div>
+        <div class="schedule-grid month">
+            <div class="schedule-cell header">Пн</div>
+            <div class="schedule-cell header">Вт</div>
+            <div class="schedule-cell header">Ср</div>
+            <div class="schedule-cell header">Чт</div>
+            <div class="schedule-cell header">Пт</div>
+            <div class="schedule-cell header">Сб</div>
+            <div class="schedule-cell header">Вс</div>
+        </div>
+    `;
+    
+    const grid = container.querySelector('.schedule-grid');
+    
+    // Empty cells before first day
+    const startDay = (firstDay.getDay() + 6) % 7;
+    for (let i = 0; i < startDay; i++) {
+        grid.innerHTML += '<div class="schedule-cell"></div>';
+    }
+    
+    // Days of month
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+        const date = new Date(year, month, day);
+        const dateStr = date.toISOString().split('T')[0];
+        const dayBookings = bookedSlots.filter(slot => slot.date === dateStr);
+        
+        let cellContent = `<strong>${day}</strong><br>`;
+        dayBookings.forEach(booking => {
+            cellContent += `<div class="booking-item">${booking.time} - ${booking.name}</div>`;
+        });
+        
+        grid.innerHTML += `<div class="schedule-cell">${cellContent}</div>`;
+    }
+}
+
+function renderWeekView(container) {
+    const startOfWeek = new Date(scheduleDate);
+    startOfWeek.setDate(scheduleDate.getDate() - (scheduleDate.getDay() + 6) % 7);
+    
+    const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    const timeSlots = generateTimeSlots();
+    
+    container.innerHTML = `
+        <div class="schedule-nav">
+            <button onclick="changeScheduleWeek(-1)">‹ Предыдущая</button>
+            <h3>Неделя ${startOfWeek.toLocaleDateString('ru')}</h3>
+            <button onclick="changeScheduleWeek(1)">Следующая ›</button>
+        </div>
+        <div class="schedule-grid week">
+            <div class="schedule-cell header"></div>
+        </div>
+    `;
+    
+    const grid = container.querySelector('.schedule-grid');
+    
+    // Week headers
+    for (let i = 0; i < 7; i++) {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        grid.innerHTML += `<div class="schedule-cell header">${weekDays[i]}<br>${day.getDate()}</div>`;
+    }
+    
+    // Time slots
+    timeSlots.forEach(time => {
+        grid.innerHTML += `<div class="schedule-cell time-header">${time}</div>`;
+        
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(startOfWeek);
+            day.setDate(startOfWeek.getDate() + i);
+            const dateStr = day.toISOString().split('T')[0];
+            
+            const booking = bookedSlots.find(slot => slot.date === dateStr && slot.time === time);
+            const cellContent = booking ? `<div class="booking-item">${booking.name}</div>` : '';
+            
+            grid.innerHTML += `<div class="schedule-cell">${cellContent}</div>`;
+        }
+    });
+}
+
+function changeScheduleMonth(direction) {
+    scheduleDate.setMonth(scheduleDate.getMonth() + direction);
+    renderScheduleCalendar();
+}
+
+function changeScheduleWeek(direction) {
+    scheduleDate.setDate(scheduleDate.getDate() + (direction * 7));
+    renderScheduleCalendar();
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('scheduleModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
 // Service options management
 const serviceOptions = {
     basic: [
