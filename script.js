@@ -155,8 +155,13 @@ function showTimeSlots(dateStr) {
 // Select time
 function selectTime(time) {
     selectedTime = time;
-    document.getElementById('time').value = time;
-    document.getElementById('time').style.display = 'block';
+    const timeInput = document.getElementById('time');
+    timeInput.value = time;
+    
+    // Показываем выбранное время пользователю
+    const selectedTimeDisplay = document.getElementById('selectedTimeDisplay');
+    selectedTimeDisplay.textContent = `Выбранное время: ${time}`;
+    selectedTimeDisplay.classList.add('show');
     
     showTimeSlots(selectedDate);
 }
@@ -185,7 +190,8 @@ document.getElementById('bookingForm').addEventListener('submit', async function
     };
     
     // Validate time slot
-    if (!selectedTime) {
+    const timeValue = document.getElementById('time').value;
+    if (!timeValue || !selectedTime) {
         alert('Пожалуйста, выберите время из доступных слотов');
         return;
     }
@@ -198,6 +204,10 @@ document.getElementById('bookingForm').addEventListener('submit', async function
     
     // Reset form
     this.reset();
+    selectedTime = null;
+    selectedDate = null;
+    document.getElementById('selectedTimeDisplay').classList.remove('show');
+    document.getElementById('calendar').innerHTML = '';
 });
 
 function showSuccessMessage() {
@@ -249,6 +259,12 @@ async function saveBooking(formData) {
         localStorage.setItem('cleanproBookings', JSON.stringify(bookings));
         alert('Заявка сохранена локально');
     }
+    
+    // Reset form after successful booking
+    selectedTime = null;
+    selectedDate = null;
+    document.getElementById('selectedTimeDisplay').classList.remove('show');
+    document.getElementById('calendar').innerHTML = '';
 }
 
 // Smooth scroll for navigation links
