@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - CleanPro</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 20px;
+        }
+        .booking-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .booking-id {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .booking-date {
+            font-weight: 600;
+            color: #2c5aa0;
+        }
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .no-bookings {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>CleanPro - Админ</h1>
+            <nav>
+                <a href="index.html">На сайт</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <h2>Заявки на уборку</h2>
+        <button class="clear-btn" onclick="clearAllBookings()">Очистить все заявки</button>
+        <div id="bookingsList"></div>
+    </div>
+
+    <script>
+        function loadBookings() {
+            const bookings = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
+            const container = document.getElementById('bookingsList');
+            
+            if (bookings.length === 0) {
+                container.innerHTML = '<div class="no-bookings">Заявок пока нет</div>';
+                return;
+            }
+            
+            container.innerHTML = bookings.map(booking => `
+                <div class="booking-item">
+                    <div class="booking-header">
+                        <span class="booking-id">ID: ${booking.id}</span>
+                        <span class="booking-date">${booking.date} в ${booking.time}</span>
+                    </div>
+                    <p><strong>Клиент:</strong> ${booking.name}</p>
+                    <p><strong>Телефон:</strong> ${booking.phone}</p>
+                    <p><strong>Услуга:</strong> ${getServiceName(booking.service)}</p>
+                    ${booking.area ? `<p><strong>Район:</strong> ${booking.area}</p>` : ''}
+                    ${booking.comment ? `<p><strong>Комментарий:</strong> ${booking.comment}</p>` : ''}
+                    <p><strong>Создано:</strong> ${new Date(booking.created).toLocaleString('ru')}</p>
+                </div>
+            `).join('');
+        }
+        
+        function getServiceName(service) {
+            const services = {
+                'basic-1br': 'Базовая уборка - 1 спальня',
+                'basic-2br': 'Базовая уборка - 2 спальни',
+                'basic-3br': 'Базовая уборка - 3 спальни',
+                'basic-4br': 'Базовая уборка - 4 спальни',
+                'spring-cleaning': 'Генеральная уборка',
+                'urgent-cleaning': 'Срочная уборка',
+                'after-renovation': 'Уборка после ремонта',
+                'dry-cleaning': 'Химчистка мебели',
+                'commercial': 'Коммерческие объекты'
+            };
+            return services[service] || service;
+        }
+        
+        function clearAllBookings() {
+            if (confirm('Удалить все заявки?')) {
+                localStorage.removeItem('cleanproBookings');
+                loadBookings();
+            }
+        }
+        
+        loadBookings();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadBookings, 30000);
+    </script>
+</body>
+</html>

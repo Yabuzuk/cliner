@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanPro - Клининговые услуги</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>CleanPro</h1>
+            <nav>
+                <a href="#services">Услуги</a>
+                <a href="#booking">Запись</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Профессиональная уборка</h2>
+                <p>Качественные клининговые услуги для дома и офиса</p>
+                <button onclick="scrollToBooking()" class="cta-btn">Записаться онлайн</button>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h3>Наши услуги</h3>
+                
+                <div class="service-category">
+                    <h4>Базовая уборка</h4>
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <h5>1 спальня</h5>
+                            <p>€50 (3ч)</p>
+                        </div>
+                        <div class="service-card">
+                            <h5>2 спальни</h5>
+                            <p>€65 (4ч)</p>
+                        </div>
+                        <div class="service-card">
+                            <h5>3 спальни</h5>
+                            <p>€80 (5ч)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-category">
+                    <h4>Генеральная уборка</h4>
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <h5>1-4 спальни</h5>
+                            <p>€16/час</p>
+                        </div>
+                        <div class="service-card">
+                            <h5>5+ спален</h5>
+                            <p>€15/час</p>
+                        </div>
+                        <div class="service-card">
+                            <h5>Срочная уборка</h5>
+                            <p>€35/час</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="service-category">
+                    <h4>Химчистка</h4>
+                    <div class="service-grid">
+                        <div class="service-card">
+                            <h5>Диван 2-местный</h5>
+                            <p>€50</p>
+                        </div>
+                        <div class="service-card">
+                            <h5>Диван 3-местный</h5>
+                            <p>€70</p>
+                        </div>
+                        <div class="service-card">
+                            <h5>Матрас двуспальный</h5>
+                            <p>€90</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="booking" class="booking">
+            <div class="container">
+                <h3>Онлайн запись</h3>
+                <form id="bookingForm" class="booking-form">
+                    <input type="text" id="name" placeholder="Ваше имя" required>
+                    <input type="tel" id="phone" placeholder="Телефон" required>
+                    <select id="service" required>
+                        <option value="">Выберите услугу</option>
+                        <option value="basic-1br">Базовая уборка - 1 спальня (€50)</option>
+                        <option value="basic-2br">Базовая уборка - 2 спальни (€65)</option>
+                        <option value="basic-3br">Базовая уборка - 3 спальни (€80)</option>
+                        <option value="basic-4br">Базовая уборка - 4 спальни (€95)</option>
+                        <option value="spring-cleaning">Генеральная уборка (€16/час)</option>
+                        <option value="urgent-cleaning">Срочная уборка (€35/час)</option>
+                        <option value="after-renovation">Уборка после ремонта (€3/м²)</option>
+                        <option value="dry-cleaning">Химчистка мебели</option>
+                        <option value="commercial">Коммерческие объекты</option>
+                    </select>
+                    <input type="date" id="date" required>
+                    <input type="time" id="time" required>
+                    <select id="area">
+                        <option value="">Район (доплата за логистику)</option>
+                        <option value="limassol">Лимассол (без доплаты)</option>
+                        <option value="mouttagiaka">Моутагиака (+€10)</option>
+                        <option value="agios-tychonas">Агиос Тихонас (+€10)</option>
+                        <option value="polemidia">Полемидия (+€10)</option>
+                        <option value="pirgos">Пиргос (+€20)</option>
+                        <option value="parekklisia">Параклиссия (+€20)</option>
+                        <option value="ypsonas">Ипсонас (+€20)</option>
+                    </select>
+                    <textarea id="comment" placeholder="Комментарий (необязательно)"></textarea>
+                    <button type="submit">Записаться</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h3>Контакты</h3>
+                <div class="contact-info">
+                    <p>📞 +357 99 123 456</p>
+                    <p>📧 info@colibricyprus.com</p>
+                    <p>🕒 Пн-Вс: 8:00 - 20:00</p>
+                    <p>📍 Лимассол, Кипр</p>
+                    <p>💶 Цены указаны без НДС</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 CleanPro. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
