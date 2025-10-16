@@ -339,9 +339,9 @@ function renderMonthView(container) {
     
     container.innerHTML = `
         <div class="schedule-nav">
-            <button onclick="changeScheduleMonth(-1)">‹ Предыдущий</button>
+            <button onclick="changeScheduleMonth(-1)">‹</button>
             <h3>${monthNames[month]} ${year}</h3>
-            <button onclick="changeScheduleMonth(1)">Следующий ›</button>
+            <button onclick="changeScheduleMonth(1)">›</button>
         </div>
         <div class="schedule-grid month">
             <div class="schedule-cell header">Пн</div>
@@ -386,9 +386,9 @@ function renderWeekView(container) {
     
     container.innerHTML = `
         <div class="schedule-nav">
-            <button onclick="changeScheduleWeek(-1)">‹ Предыдущая</button>
+            <button onclick="changeScheduleWeek(-1)">‹</button>
             <h3>Неделя ${startOfWeek.toLocaleDateString('ru')}</h3>
-            <button onclick="changeScheduleWeek(1)">Следующая ›</button>
+            <button onclick="changeScheduleWeek(1)">›</button>
         </div>
         <div class="schedule-grid week">
             <div class="schedule-cell header"></div>

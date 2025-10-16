@@ -379,12 +379,12 @@ footer {
 
 .schedule-modal-content {
     background-color: white;
-    margin: 5% auto;
+    margin: 2% auto;
     padding: 0;
     border-radius: 10px;
-    width: 90%;
+    width: 95%;
     max-width: 1000px;
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: auto;
 }
 
@@ -444,9 +444,15 @@ footer {
     background: #2c5aa0;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 10px 15px;
+    border-radius: 50%;
     cursor: pointer;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .schedule-grid {
@@ -466,9 +472,10 @@ footer {
 
 .schedule-cell {
     background: white;
-    padding: 10px;
-    min-height: 80px;
+    padding: 5px;
+    min-height: 60px;
     position: relative;
+    font-size: 12px;
 }
 
 .schedule-cell.header {
@@ -491,10 +498,10 @@ footer {
 .booking-item {
     background: #dc3545;
     color: white;
-    padding: 2px 5px;
+    padding: 1px 3px;
     margin: 1px 0;
-    border-radius: 3px;
-    font-size: 11px;
+    border-radius: 2px;
+    font-size: 9px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -512,8 +519,17 @@ footer {
         gap: 1rem;
     }
     
-    nav a {
-        margin: 0 1rem;
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    nav a, .calendar-btn {
+        margin: 0;
+        font-size: 14px;
+        padding: 6px 12px;
     }
     
     .hero h2 {
@@ -522,5 +538,60 @@ footer {
     
     .service-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .schedule-modal-content {
+        width: 98%;
+        margin: 1% auto;
+        max-height: 95vh;
+    }
+    
+    .schedule-header {
+        padding: 15px;
+    }
+    
+    .schedule-header h3 {
+        font-size: 18px;
+    }
+    
+    .schedule-controls {
+        padding: 15px;
+    }
+    
+    .view-btn {
+        padding: 6px 15px;
+        font-size: 14px;
+    }
+    
+    .schedule-calendar {
+        padding: 10px;
+    }
+    
+    .schedule-nav h3 {
+        font-size: 16px;
+    }
+    
+    .schedule-cell {
+        padding: 3px;
+        min-height: 40px;
+        font-size: 10px;
+    }
+    
+    .schedule-cell.header {
+        padding: 5px 2px;
+        font-size: 11px;
+    }
+    
+    .booking-item {
+        font-size: 8px;
+        padding: 1px 2px;
+    }
+    
+    .schedule-grid.week {
+        grid-template-columns: 60px repeat(7, 1fr);
+    }
+    
+    .schedule-cell.time-header {
+        font-size: 9px;
     }
 }
