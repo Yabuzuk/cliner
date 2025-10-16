@@ -84,6 +84,7 @@
                     </div>
                     <p><strong>Клиент:</strong> ${booking.name}</p>
                     <p><strong>Телефон:</strong> ${booking.phone}</p>
+                    <p><strong>Тип услуги:</strong> ${booking.serviceType}</p>
                     <p><strong>Услуга:</strong> ${getServiceName(booking.service)}</p>
                     ${booking.area ? `<p><strong>Район:</strong> ${booking.area}</p>` : ''}
                     ${booking.comment ? `<p><strong>Комментарий:</strong> ${booking.comment}</p>` : ''}
@@ -98,11 +99,48 @@
                 'basic-2br': 'Базовая уборка - 2 спальни',
                 'basic-3br': 'Базовая уборка - 3 спальни',
                 'basic-4br': 'Базовая уборка - 4 спальни',
-                'spring-cleaning': 'Генеральная уборка',
-                'urgent-cleaning': 'Срочная уборка',
-                'after-renovation': 'Уборка после ремонта',
-                'dry-cleaning': 'Химчистка мебели',
-                'commercial': 'Коммерческие объекты'
+                'basic-5br': 'Базовая уборка - 5 спален',
+                'basic-large': 'Базовая уборка - более 250м²',
+                'spring-1br': 'Генеральная уборка - 1 спальня',
+                'spring-2br': 'Генеральная уборка - 2 спальни',
+                'spring-3br': 'Генеральная уборка - 3 спальни',
+                'spring-4br': 'Генеральная уборка - 4 спальни',
+                'spring-5br': 'Генеральная уборка - 5 спален',
+                'urgent-standard': 'Срочная уборка',
+                'urgent-large': 'Срочная уборка - более 250м²',
+                'renovation-1br': 'Уборка после ремонта - 1 спальня',
+                'renovation-2br': 'Уборка после ремонта - 2 спальни',
+                'renovation-3br': 'Уборка после ремонта - 3 спальни',
+                'renovation-4br': 'Уборка после ремонта - 4 спальни',
+                'renovation-5br': 'Уборка после ремонта - 5 спален',
+                'commercial-basic': 'Коммерческая базовая уборка',
+                'commercial-spring': 'Коммерческая генеральная уборка',
+                'commercial-renovation': 'Коммерческая уборка после ремонта',
+                'sofa-2seat': 'Химчистка - 2-местный диван',
+                'sofa-3seat': 'Химчистка - 3-местный диван',
+                'sofa-4seat': 'Химчистка - 4-местный диван',
+                'sofa-corner': 'Химчистка - угловой диван',
+                'sofa-large-corner': 'Химчистка - большой угловой диван',
+                'mattress-single': 'Химчистка - одиночный матрас',
+                'mattress-half': 'Химчистка - полутораспальный матрас',
+                'mattress-double': 'Химчистка - двуспальный матрас',
+                'carpet-low': 'Химчистка - ковер с коротким ворсом',
+                'carpet-medium': 'Химчистка - ковер со средним ворсом',
+                'carpet-high': 'Химчистка - ковер с длинным ворсом',
+                'armchair': 'Химчистка - кресло',
+                'armchair-sliding': 'Химчистка - раздвижное кресло',
+                'chair-office': 'Химчистка - офисный стул',
+                'chair': 'Химчистка - стул',
+                'bench': 'Химчистка - банкетка',
+                'pickup-key': 'Забрать за ключом',
+                'ironing': 'Глажка белья',
+                'washing': 'Стирка, развесить белье',
+                'animal-tray': 'Почистить лоток для животных',
+                'errands': 'Поручения (химчистка, магазин, обувь)',
+                'mosquito-net': 'Москитная сетка',
+                'street-blinds': 'Уличные жалюзи',
+                'yard-cleaning': 'Уборка придомовой территории',
+                'animals-house': 'Животные в доме'
             };
             return services[service] || service;
         }

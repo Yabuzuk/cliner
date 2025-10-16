@@ -93,17 +93,18 @@
                 <form id="bookingForm" class="booking-form">
                     <input type="text" id="name" placeholder="Ваше имя" required>
                     <input type="tel" id="phone" placeholder="Телефон" required>
-                    <select id="service" required>
-                        <option value="">Выберите услугу</option>
-                        <option value="basic-1br">Базовая уборка - 1 спальня (€50)</option>
-                        <option value="basic-2br">Базовая уборка - 2 спальни (€65)</option>
-                        <option value="basic-3br">Базовая уборка - 3 спальни (€80)</option>
-                        <option value="basic-4br">Базовая уборка - 4 спальни (€95)</option>
-                        <option value="spring-cleaning">Генеральная уборка (€16/час)</option>
-                        <option value="urgent-cleaning">Срочная уборка (€35/час)</option>
-                        <option value="after-renovation">Уборка после ремонта (€3/м²)</option>
-                        <option value="dry-cleaning">Химчистка мебели</option>
+                    <select id="serviceType" required onchange="updateServiceOptions()">
+                        <option value="">Выберите тип услуги</option>
+                        <option value="basic">Базовая уборка</option>
+                        <option value="spring">Генеральная уборка</option>
+                        <option value="urgent">Срочная уборка</option>
+                        <option value="renovation">Уборка после ремонта</option>
                         <option value="commercial">Коммерческие объекты</option>
+                        <option value="drycleaning">Химчистка</option>
+                        <option value="additional">Дополнительные услуги</option>
+                    </select>
+                    <select id="service" required style="display:none;">
+                        <option value="">Выберите услугу</option>
                     </select>
                     <input type="date" id="date" required>
                     <input type="time" id="time" required>
