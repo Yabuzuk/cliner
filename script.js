@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Form submission
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const formData = {
@@ -41,8 +41,8 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
         return;
     }
     
-    // Save booking to localStorage
-    saveBooking(formData);
+    // Save booking to Firebase/localStorage
+    await saveBooking(formData);
     
     // Show success message
     showSuccessMessage();
@@ -68,17 +68,29 @@ function showSuccessMessage() {
     }, 5000);
 }
 
-function saveBooking(formData) {
-    const bookings = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
-    
+async function saveBooking(formData) {
     const booking = {
-        id: Date.now().toString(),
-        ...formData,
-        created: new Date().toISOString()
+        name: formData.name,
+        phone: formData.phone,
+        service_type: formData.serviceType,
+        service: formData.service,
+        date: formData.date,
+        time: formData.time,
+        area: formData.area,
+        comment: formData.comment
     };
     
-    bookings.unshift(booking);
-    localStorage.setItem('cleanproBookings', JSON.stringify(bookings));
+    try {
+        await window.supabaseDB.insert(booking);
+        console.log('Заявка сохранена в Supabase');
+    } catch (error) {
+        console.log('Ошибка Supabase, сохраняем локально:', error);
+        const bookings = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
+        booking.id = Date.now().toString();
+        booking.created = new Date().toISOString();
+        bookings.unshift(booking);
+        localStorage.setItem('cleanproBookings', JSON.stringify(bookings));
+    }
 }
 
 // Smooth scroll for navigation links

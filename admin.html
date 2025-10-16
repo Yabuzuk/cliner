@@ -60,15 +60,54 @@
         </div>
     </header>
 
-    <div class="admin-container">
+    <div id="loginForm" class="admin-container" style="text-align: center;">
+        <h2>Вход в админ-панель</h2>
+        <input type="password" id="adminPassword" placeholder="Пароль" style="padding: 10px; margin: 10px; font-size: 16px;">
+        <button onclick="checkPassword()" style="padding: 10px 20px; font-size: 16px;">Войти</button>
+    </div>
+    
+    <div id="adminPanel" class="admin-container" style="display: none;">
         <h2>Заявки на уборку</h2>
         <button class="clear-btn" onclick="clearAllBookings()">Очистить все заявки</button>
         <div id="bookingsList"></div>
     </div>
 
     <script>
-        function loadBookings() {
-            const bookings = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
+        const supabaseUrl = 'https://tbcfgeimrdbqvxziahno.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiY2ZnZWltcmRicXZ4emlhaG5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1OTUxNDMsImV4cCI6MjA3NjE3MTE0M30.u_axE5nlGJ69YmnqfS3SrjWol3C-Xf48iLzjNab8uW4';
+        
+        window.supabaseAdmin = {
+            select: async () => {
+                const response = await fetch(`${supabaseUrl}/rest/v1/bookings?order=created_at.desc`, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    }
+                });
+                return response.json();
+            }
+        };
+    </script>
+    <script>
+        async function loadBookings() {
+            let bookings = [];
+            
+            try {
+                if (window.supabaseAdmin) {
+                    const { data, error } = await window.supabaseAdmin
+                        .from('bookings')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (error) throw error;
+                    bookings = data || [];
+                } else {
+                    throw new Error('Supabase недоступен');
+                }
+            } catch (error) {
+                console.log('Ошибка Supabase, загружаем из localStorage:', error);
+                bookings = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
+            }
             const container = document.getElementById('bookingsList');
             
             if (bookings.length === 0) {
@@ -88,7 +127,7 @@
                     <p><strong>Услуга:</strong> ${getServiceName(booking.service)}</p>
                     ${booking.area ? `<p><strong>Район:</strong> ${booking.area}</p>` : ''}
                     ${booking.comment ? `<p><strong>Комментарий:</strong> ${booking.comment}</p>` : ''}
-                    <p><strong>Создано:</strong> ${new Date(booking.created).toLocaleString('ru')}</p>
+                    <p><strong>Создано:</strong> ${new Date(booking.created_at || booking.created).toLocaleString('ru')}</p>
                 </div>
             `).join('');
         }
@@ -152,10 +191,24 @@
             }
         }
         
-        loadBookings();
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'colibri2024') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadBookings();
+                setInterval(loadBookings, 30000);
+            } else {
+                alert('Неверный пароль');
+            }
+        }
         
-        // Auto-refresh every 30 seconds
-        setInterval(loadBookings, 30000);
+        // Проверка пароля по Enter
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('loginForm').style.display !== 'none') {
+                checkPassword();
+            }
+        });
     </script>
 </body>
 </html>

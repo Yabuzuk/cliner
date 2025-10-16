@@ -144,6 +144,36 @@
         </div>
     </footer>
 
+    <!-- Supabase SDK -->
+    <script>
+        // Простое REST API решение для Supabase
+        const supabaseUrl = 'https://tbcfgeimrdbqvxziahno.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRiY2ZnZWltcmRicXZ4emlhaG5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1OTUxNDMsImV4cCI6MjA3NjE3MTE0M30.u_axE5nlGJ69YmnqfS3SrjWol3C-Xf48iLzjNab8uW4';
+        
+        window.supabaseDB = {
+            insert: async (data) => {
+                const response = await fetch(`${supabaseUrl}/rest/v1/bookings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                return response.json();
+            },
+            select: async () => {
+                const response = await fetch(`${supabaseUrl}/rest/v1/bookings?order=created_at.desc`, {
+                    headers: {
+                        'apikey': supabaseKey,
+                        'Authorization': `Bearer ${supabaseKey}`
+                    }
+                });
+                return response.json();
+            }
+        };
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
