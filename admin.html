@@ -69,6 +69,7 @@
     <div id="adminPanel" class="admin-container" style="display: none;">
         <h2>Заявки на уборку</h2>
         <button class="clear-btn" onclick="clearAllBookings()">Очистить все заявки</button>
+        <button class="clear-btn" onclick="testConnection()" style="background: #28a745;">Тест соединения</button>
         <div id="bookingsList"></div>
     </div>
 
@@ -114,21 +115,26 @@
                 return;
             }
             
-            container.innerHTML = bookings.map(booking => `
+            console.log('Отображаем заявки:', bookings);
+            
+            container.innerHTML = bookings.map(booking => {
+                console.log('Обрабатываем заявку:', booking);
+                return `
                 <div class="booking-item">
                     <div class="booking-header">
-                        <span class="booking-id">ID: ${booking.id}</span>
-                        <span class="booking-date">${booking.date} в ${booking.time}</span>
+                        <span class="booking-id">ID: ${booking.id || 'N/A'}</span>
+                        <span class="booking-date">${booking.date || 'N/A'} в ${booking.time || 'N/A'}</span>
                     </div>
-                    <p><strong>Клиент:</strong> ${booking.name}</p>
-                    <p><strong>Телефон:</strong> ${booking.phone}</p>
-                    <p><strong>Тип услуги:</strong> ${booking.serviceType}</p>
-                    <p><strong>Услуга:</strong> ${getServiceName(booking.service)}</p>
+                    <p><strong>Клиент:</strong> ${booking.name || 'N/A'}</p>
+                    <p><strong>Телефон:</strong> ${booking.phone || 'N/A'}</p>
+                    <p><strong>Тип услуги:</strong> ${booking.service_type || booking.serviceType || 'N/A'}</p>
+                    <p><strong>Услуга:</strong> ${getServiceName(booking.service) || booking.service || 'N/A'}</p>
                     ${booking.area ? `<p><strong>Район:</strong> ${booking.area}</p>` : ''}
                     ${booking.comment ? `<p><strong>Комментарий:</strong> ${booking.comment}</p>` : ''}
-                    <p><strong>Создано:</strong> ${new Date(booking.created_at || booking.created).toLocaleString('ru')}</p>
+                    <p><strong>Создано:</strong> ${new Date(booking.created_at || booking.created || Date.now()).toLocaleString('ru')}</p>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
         
         function getServiceName(service) {
@@ -186,8 +192,17 @@
         function clearAllBookings() {
             if (confirm('Удалить все заявки?')) {
                 localStorage.removeItem('cleanproBookings');
+                // TODO: добавить удаление из Supabase
                 loadBookings();
             }
+        }
+        
+        // Тестовая функция для проверки
+        function testConnection() {
+            console.log('Supabase URL:', supabaseUrl);
+            console.log('Supabase Key:', supabaseKey ? 'Ключ установлен' : 'Ключ отсутствует');
+            console.log('Admin object:', window.supabaseAdmin);
+            loadBookings();
         }
         
         function checkPassword() {
