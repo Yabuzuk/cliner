@@ -99,13 +99,7 @@
             
             try {
                 if (window.supabaseAdmin) {
-                    const { data, error } = await window.supabaseAdmin
-                        .from('bookings')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (error) throw error;
-                    bookings = data || [];
+                    bookings = await window.supabaseAdmin.select();
                 } else {
                     throw new Error('Supabase недоступен');
                 }
