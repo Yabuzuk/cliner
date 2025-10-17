@@ -84,6 +84,11 @@
                         'Authorization': `Bearer ${supabaseKey}`
                     }
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
                 return response.json();
             }
         };

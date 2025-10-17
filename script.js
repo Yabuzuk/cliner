@@ -228,43 +228,59 @@ function showSuccessMessage() {
 }
 
 async function saveBooking(formData) {
+    // Проверяем обязательные поля
+    if (!formData.name || !formData.phone || !formData.service || !formData.date || !formData.time) {
+        alert('Пожалуйста, заполните все обязательные поля');
+        return;
+    }
+    
     const booking = {
-        name: formData.name,
-        phone: formData.phone,
-        service_type: formData.serviceType,
-        service: formData.service,
+        name: formData.name.trim(),
+        phone: formData.phone.trim(),
+        service_type: formData.serviceType || null,
+        service: formData.service.trim(),
         date: formData.date,
         time: formData.time,
-        area: formData.area,
-        comment: formData.comment
+        area: formData.area || null,
+        comment: formData.comment ? formData.comment.trim() : null
     };
     
     try {
         console.log('Попытка сохранить:', booking);
         const result = await window.supabaseDB.insert(booking);
         console.log('Заявка сохранена в Supabase:', result);
+        
         // Обновляем календарь
         await loadBookedSlots();
         renderCalendar();
         if (selectedDate) showTimeSlots(selectedDate);
         
-        alert('Заявка отправлена в базу данных!');
+        alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
+        
+        // Reset form after successful booking
+        selectedTime = null;
+        selectedDate = null;
+        document.getElementById('selectedTimeDisplay').classList.remove('show');
+        document.getElementById('calendar').innerHTML = '';
+        
     } catch (error) {
-        console.log('Ошибка Supabase:', error);
-        alert('Ошибка сохранения в базу, сохраняем локально');
+        console.error('Ошибка Supabase:', error);
+        
+        // Сохраняем локально как резерв
         const bookings = JSON.parse(localStorage.getItem('cleanproBookings') || '[]');
         booking.id = Date.now().toString();
         booking.created = new Date().toISOString();
         bookings.unshift(booking);
         localStorage.setItem('cleanproBookings', JSON.stringify(bookings));
-        alert('Заявка сохранена локально');
+        
+        alert('Спасибо! Ваша заявка принята (сохранена локально). Мы свяжемся с вами.');
+        
+        // Reset form
+        selectedTime = null;
+        selectedDate = null;
+        document.getElementById('selectedTimeDisplay').classList.remove('show');
+        document.getElementById('calendar').innerHTML = '';
     }
-    
-    // Reset form after successful booking
-    selectedTime = null;
-    selectedDate = null;
-    document.getElementById('selectedTimeDisplay').classList.remove('show');
-    document.getElementById('calendar').innerHTML = '';
 }
 
 // Smooth scroll for navigation links
